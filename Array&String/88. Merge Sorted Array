@@ -74,3 +74,36 @@ public:
     
     }
 };
+
+//this solution is solved in O(1) TC=m(log(m))
+class Solution {
+public:
+    void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
+        int first=0;
+        int second=0;
+        if(m==0){
+            nums1=nums2;
+            return;
+        }
+        if(n==0){
+            return;
+        }
+        else{
+         for(int i=0;i<m;i++){
+            if(nums1[first]>nums2[second]){
+                swap(nums1[first],nums2[second]);
+                first++;
+                sort(nums2.begin(),nums2.end());
+            }
+            else{
+                first++;
+            }
+        }
+        for(int i=0;i<nums2.size();i++){
+            nums1[nums1.size()-nums2.size()+i]=nums2[i];
+        }           
+        }
+        
+
+    }
+};
