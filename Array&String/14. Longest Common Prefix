@@ -1,0 +1,99 @@
+/*
+
+Write a function to find the longest common prefix string amongst an array of strings.
+
+If there is no common prefix, return an empty string "".
+
+ 
+
+Example 1:
+
+Input: strs = ["flower","flow","flight"]
+Output: "fl"
+Example 2:
+
+Input: strs = ["dog","racecar","car"]
+Output: ""
+Explanation: There is no common prefix among the input strings.
+ 
+
+Constraints:
+
+1 <= strs.length <= 200
+0 <= strs[i].length <= 200
+strs[i] consists of only lowercase English letters.
+*/
+
+class trie {
+public:
+    char ch;
+    bool last;
+    trie* children[26];
+
+    trie(char ch) {
+        this->ch = ch;
+        this->last=false;
+        for (int i = 0; i < 26; i++) {
+            this->children[i] = NULL;
+        }
+    }
+};
+
+class Solution {
+    trie* root;
+
+public:
+    Solution() {
+        root = new trie('#');
+    }
+
+    void insert(trie* root, string word) {
+        trie* node = root;
+        for (int i = 0; i < word.size(); i++) {
+            char ch = word[i];
+            int index = ch - 'a';
+
+            if (node->children[index] != NULL) {
+                node = node->children[index];
+            } else {
+                trie* newnode = new trie(ch);
+                node->children[index] = newnode;
+                node = newnode;
+            }
+        }
+        node->last=true;
+    }
+
+    string solvetrie(trie* root) {
+        string ans = "";
+        trie* node = root;
+
+        while (true) {
+            int count = 0;
+            trie* nextNode = NULL;
+            for (int i = 0; i < 26; i++) {
+                if (node->children[i] != NULL) {
+                    count++;
+                    nextNode = node->children[i];
+                }
+            }
+
+            if (count == 1 && !node->last) {
+                ans += nextNode->ch;
+                node = nextNode;
+            } else {
+                break;
+            }
+        }
+
+        return ans;
+    }
+    string longestCommonPrefix(std::vector<std::string>& strs) {
+        for (auto it : strs) {
+            insert(root, it);
+        }
+
+        string s = solvetrie(root);
+        return s;
+    }
+};
